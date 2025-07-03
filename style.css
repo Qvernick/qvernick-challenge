@@ -1,0 +1,144 @@
+/* Базовые стили, остальное через Tailwind CSS */
+body {
+    font-family: 'Inter', sans-serif;
+    /* Атмосферный фон в стиле Stalcraft */
+    background-image: url('https://avatars.mds.yandex.net/i?id=861324adcdb8c51ea78819ecb4c4a6cc_l-5232907-images-thumbs&n=13'); 
+    background-size: cover; 
+    background-position: center; 
+    background-attachment: fixed; 
+    background-color: #2c3e50; /* Запасной темный цвет фона */
+    position: relative; 
+    z-index: 1; 
+}
+
+/* Полупрозрачный оверлей для улучшения читаемости текста */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.65); 
+    z-index: -1; 
+}
+
+/* Скрытый класс, используется для переключения видимости элементов */
+.hidden {
+    display: none !important;
+}
+
+/* Анимации для плавного появления/исчезновения экранов */
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+/* Стили для элементов рулетки, чтобы предотвратить тряску */
+.roulette-display {
+    white-space: nowrap; /* Предотвращает перенос текста */
+    overflow: hidden; /* Обрезает текст, который не помещается */
+    text-overflow: ellipsis; /* Добавляет многоточие, если текст обрезан */
+    position: relative; /* Для анимации translateX */
+}
+
+/* Анимация вращения для рулетки (убрана тряска) */
+@keyframes spin-animation {
+    0% { opacity: 1; transform: translateX(0); }
+    25% { opacity: 0.7; transform: translateX(-10px); }
+    50% { opacity: 0.5; transform: translateX(10px); }
+    75% { opacity: 0.7; transform: translateX(-5px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.roulette-display.spinning {
+    animation: spin-animation 0.2s linear infinite;
+}
+
+/* Анимация для выбранной карточки */
+@keyframes card-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+    50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+}
+
+.card.selected-card {
+    border-color: #10b981; /* green-500 */
+    transform: scale(1.02); 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    animation: card-pulse 1.5s infinite alternate; /* Применяем анимацию пульсации */
+}
+
+/* Дополнительные стили для карточек, если Tailwind не полностью покрывает */
+.card .positive {
+    color: #86efac; /* Tailwind green-300 */
+}
+
+.card .negative {
+    color: #fca5a5; /* Tailwind red-300 */
+}
+
+/* Стили для кнопки удаления в админке */
+.challenge-item .delete-btn {
+    background-color: #ef4444; /* Tailwind red-500 */
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.875rem; /* text-sm */
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: background-color 0.3s ease;
+}
+
+.challenge-item .delete-btn:hover {
+    background-color: #dc2626; /* Tailwind red-600 */
+}
+
+/* Стили для кнопки редактирования в админке */
+.challenge-item .edit-btn {
+    background-color: #3b82f6; /* Tailwind blue-500 */
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.875rem; /* text-sm */
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: background-color 0.3s ease;
+    margin-right: 8px; /* ml-2 */
+}
+
+.challenge-item .edit-btn:hover {
+    background-color: #2563eb; /* Tailwind blue-600 */
+}
+
+/* Стили для элементов списка челленджей в админке */
+.challenge-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #374151; /* gray-700 */
+    padding: 1rem;
+    border-radius: 0.75rem; /* rounded-xl */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow-md */
+}
+
+.challenge-item h3 {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    color: #d1d5db; /* gray-300 */
+    margin-bottom: 0.5rem;
+}
+
+.challenge-item p {
+    font-size: 0.875rem; /* text-sm */
+    color: #9ca3af; /* gray-400 */
+}

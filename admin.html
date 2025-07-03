@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель Челленджей</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение шрифта Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script>
+      // Ваш firebaseConfig
+      const firebaseConfig = {
+        apiKey: "AIzaSyCmRMIai1KuLRenGXa0rgwVaZJp14y9FnM",
+        authDomain: "stalcraft-challenges.firebaseapp.com",
+        projectId: "stalcraft-challenges",
+        storageBucket: "stalcraft-challenges.firebasestorage.app",
+        messagingSenderId: "726911415884",
+        appId: "1:726911415884:web:bb3702278cdf7eb1a1e6e9"
+      };
+
+      // Инициализируем Firebase
+      firebase.initializeApp(firebaseConfig);
+      // Получаем ссылку на Firestore и делаем ее глобальной через window
+      window.db = firebase.firestore();
+    </script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100 font-inter p-4">
+
+    <div id="login-screen" class="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto space-y-6">
+        <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Вход в Админ-панель</h1>
+        <input type="password" id="admin-password" placeholder="Введите код доступа"
+               class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+        <button id="login-btn"
+                class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+            Войти
+        </button>
+    </div>
+
+    <div id="admin-panel" class="hidden bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-3xl mx-auto space-y-6">
+        <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Управление Челленджами</h1>
+        
+        <div class="form-container bg-gray-700 p-6 rounded-xl space-y-4">
+            <h2 class="text-2xl font-bold text-gray-200">Создать новый челлендж</h2>
+            <input type="text" id="challenge-name" placeholder="Название челленджа (например, 'Майнкрафт Хардкор')"
+                   class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+            
+            <h3 class="text-xl font-semibold text-gray-200 mt-4">Описание челленджа</h3>
+            <textarea id="challenge-description" rows="4" placeholder="Краткое описание челленджа, например, 'Выживание в хардкорном режиме с особыми правилами.'"
+                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+
+            <h3 class="text-xl font-semibold text-gray-200 mt-4">Основные Правила Челленджа (каждое с новой строки)</h3>
+            <textarea id="challenge-rules" rows="6" placeholder="Правило 1&#10;Правило 2&#10;Правило 3"
+                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+
+            <h3 class="text-xl font-semibold text-gray-200 mt-4">Положительные эффекты (каждый с новой строки)</h3>
+            <textarea id="positive-effects" rows="8" placeholder="Двойной урон&#10;Регенерация&#10;+100 монет"
+                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+            
+            <h3 class="text-xl font-semibold text-gray-200 mt-4">Отрицательные эффекты (каждый с новой строки)</h3>
+            <textarea id="negative-effects" rows="8" placeholder="Слепота на 30 сек&#10;Потерять все оружие&#10;-100 монет"
+                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+            
+            <button id="create-challenge-btn"
+                    class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                Создать и сохранить
+            </button>
+        </div>
+
+        <hr class="border-gray-700">
+
+        <h2 class="text-2xl font-bold text-gray-200">Сохраненные челленджи</h2>
+        <div id="challenges-list" class="space-y-4">
+            <!-- Список челленджей будет здесь -->
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
