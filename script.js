@@ -131,7 +131,7 @@ function startNewRound() {
     rouletteSection.classList.remove('hidden'); 
     spinRouletteBtn.disabled = false; 
     rerollLocationBtn.classList.add('hidden'); 
-    proceedAfterRouletteBtn.classList.add('hidden'); // Скрываем кнопку продолжить
+    proceedAfterRouletteBtn.classList.add('hidden'); 
 
     rouletteArmorDisplay.textContent = 'Броня...';
     rouletteWeaponDisplay.textContent = 'Оружие...';
@@ -249,16 +249,11 @@ function selectCard(positive, negative, clickedCardElement) {
     chosenEffects.push({ positive, negative }); 
     updatePlayerEffects(); 
 
-    // Добавляем класс для анимации пульсации к выбранной карточке
-    // Сначала убираем класс у всех, чтобы только одна была активна
     document.querySelectorAll('.card').forEach(card => {
         card.classList.remove('selected-card');
     });
     clickedCardElement.classList.add('selected-card');
 
-
-    // Обновляем содержимое cardsContainer, чтобы показать только выбранную карточку
-    // Делаем это через небольшую задержку, чтобы анимация успела начаться на всех карточках
     setTimeout(() => {
         cardsContainer.innerHTML = `
             <div class="card selected-card flex-1 p-6 border-2 border-green-500 rounded-2xl bg-gray-700 shadow-lg flex flex-col justify-between items-center text-center transition transform scale-100">
@@ -267,7 +262,7 @@ function selectCard(positive, negative, clickedCardElement) {
                 <div class="negative text-red-400 font-semibold text-xl">- ${negative}</div>
             </div>
         `;
-    }, 300); // Небольшая задержка
+    }, 300); 
 
     clearInterval(timer); 
     startTimer(); 
@@ -276,13 +271,35 @@ function selectCard(positive, negative, clickedCardElement) {
 // Обновляет список эффектов на экране игрока
 function updatePlayerEffects() {
     playerEffectsList.innerHTML = ''; 
-    chosenEffects.forEach(effect => {
+    chosenEffects.forEach((effect, index) => {
         const li = document.createElement('li');
-        li.classList.add('bg-gray-700', 'p-3', 'rounded-lg', 'shadow-sm', 'text-gray-200');
-        li.innerHTML = `<span class="text-green-400">[+ ${effect.positive}]</span> и <span class="text-red-400">[- ${effect.negative}]</span>`;
+        li.classList.add('bg-gray-700', 'p-3', 'rounded-lg', 'shadow-sm', 'text-gray-200', 'flex', 'justify-between', 'items-center');
+        li.innerHTML = `
+            <span>
+                <span class="text-green-400">[+ ${effect.positive}]</span> и <span class="text-red-400">[- ${effect.negative}]</span>
+            </span>
+            <button class="delete-effect-btn bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded-full text-xs transition-colors duration-200" data-index="${index}">X</button>
+        `;
         playerEffectsList.appendChild(li);
     });
+
+    // Добавляем обработчики для новых кнопок удаления
+    document.querySelectorAll('.delete-effect-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const indexToRemove = parseInt(event.target.dataset.index);
+            removeEffect(indexToRemove);
+        });
+    });
 }
+
+// Новая функция для удаления эффекта
+function removeEffect(index) {
+    if (index >= 0 && index < chosenEffects.length) {
+        chosenEffects.splice(index, 1); // Удаляем эффект по индексу
+        updatePlayerEffects(); // Обновляем список на экране
+    }
+}
+
 
 // Сбрасывает таймер до начального значения
 function resetTimer() {
@@ -307,29 +324,24 @@ function resetGame() {
     if (confirm('Вы уверены, что хотите закончить текущий челлендж и начать заново?')) {
         clearInterval(timer); 
         
-        // Сброс всех переменных состояния
         selectedChallengeData = {};
         chosenEffects.length = 0;
         selectedRandomArmor = 'Не выбрано';
         selectedRandomWeapon = 'Не выбрано';
         selectedRandomLocation = 'Не выбрано';
 
-        // Сброс полей ввода
         nicknameInput.value = '';
         challengeSelect.value = '';
         armorListInput.value = '';
         weaponListInput.value = '';
 
-        // Скрываем все экраны и показываем экран настройки
         showScreen(setupScreen);
         
-        // Скрываем описание и правила на экране настройки
         challengeDescriptionDisplay.classList.add('hidden');
         setupChallengeRulesDisplay.classList.add('hidden');
         
-        // Обновляем выпадающий список челленджей
         loadChallengesIntoSelect();
-        updatePlayerEffects(); // Очищаем список эффектов на UI
+        updatePlayerEffects(); 
         currentArmorDisplay.textContent = 'Не выбрано';
         currentWeaponDisplay.textContent = 'Не выбрано';
         currentLocationDisplay.textContent = 'Не выбрано';
