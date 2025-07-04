@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель Подсчета</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение шрифта Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK (для консистентности, хотя здесь не используется напрямую Firestore) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script>
+      // Ваш firebaseConfig
+      const firebaseConfig = {
+        apiKey: "AIzaSyCmRMIai1KuLRenGXa0rgwVaZJp14y9FnM",
+        authDomain: "stalcraft-challenges.firebaseapp.com",
+        projectId: "stalcraft-challenges",
+        storageBucket: "stalcraft-challenges.firebasestorage.app",
+        messagingSenderId: "726911415884",
+        appId: "1:726911415884:web:bb3702278cdf7eb1a1e6e9"
+      };
+
+      // Инициализируем Firebase
+      firebase.initializeApp(firebaseConfig);
+      window.db = firebase.firestore(); // Для консистентности
+    </script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100 font-inter p-4">
+
+    <div id="login-screen" class="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto space-y-6">
+        <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Вход в Подсчет</h1>
+        <input type="password" id="admin-password" placeholder="Введите код доступа"
+               class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+        <button id="login-btn"
+                class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+            Войти
+        </button>
+    </div>
+
+    <div id="score-panel" class="hidden bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-5xl mx-auto space-y-6">
+        <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Подсчет Результатов Челленджа</h1>
+        
+        <div class="form-container bg-gray-700 p-6 rounded-xl space-y-4">
+            <h2 class="text-2xl font-bold text-gray-200">Выберите условие победы:</h2>
+            <select id="victory-condition-select"
+                    class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                <option value="">-- Выберите условие --</option>
+                <option value="sum_of_5_runs">Суммарно вынести больше за 5 ходок</option>
+                <option value="point_system">Балльная система</option>
+            </select>
+
+            <!-- Калькулятор для "Суммарно вынести больше за 5 ходок" -->
+            <div id="sum-calculator" class="hidden space-y-6 pt-4 border-t border-gray-600 mt-4">
+                <h3 class="text-xl font-semibold text-gray-200 text-center">Суммарный вынос за 5 ходок</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-bold text-blue-400 mb-2">Игрок 1</h4>
+                        <input type="number" id="run1-money-p1" placeholder="Вынос за ходку 1 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run2-money-p1" placeholder="Вынос за ходку 2 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run3-money-p1" placeholder="Вынос за ходку 3 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run4-money-p1" placeholder="Вынос за ходку 4 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run5-money-p1" placeholder="Вынос за ходку 5 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-red-400 mb-2">Игрок 2</h4>
+                        <input type="number" id="run1-money-p2" placeholder="Вынос за ходку 1 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run2-money-p2" placeholder="Вынос за ходку 2 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run3-money-p2" placeholder="Вынос за ходку 3 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run4-money-p2" placeholder="Вынос за ходку 4 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        <input type="number" id="run5-money-p2" placeholder="Вынос за ходку 5 (руб.)" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                </div>
+                <button id="calculate-sum-btn"
+                        class="w-full py-3 px-6 rounded-lg bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    Рассчитать победителя
+                </button>
+            </div>
+
+            <!-- Калькулятор для "Балльная система" -->
+            <div id="points-calculator" class="hidden space-y-6 pt-4 border-t border-gray-600 mt-4">
+                <h3 class="text-xl font-semibold text-gray-200 text-center">Балльная система</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-bold text-blue-400 mb-2">Игрок 1</h4>
+                        <label for="completed-podlyanki-p1" class="block text-gray-300 text-sm font-semibold mb-1">Выполнено подлянок (+1 балл каждая):</label>
+                        <input type="number" id="completed-podlyanki-p1" value="0" min="0" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        
+                        <label for="successful-vynos-p1" class="block text-gray-300 text-sm font-semibold mb-1">Успешных выносов (100к) (+2 балла каждый):</label>
+                        <input type="number" id="successful-vynos-p1" value="0" min="0" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        
+                        <label for="money-above-target-p1" class="block text-gray-300 text-sm font-semibold mb-1">Суммарно вынесено сверх цели (каждые 30к +1 балл):</label>
+                        <input type="number" id="money-above-target-p1" value="0" min="0" placeholder="Например, 60000 для 2 баллов" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        
+                        <label for="first-attempt-vynos-p1" class="block text-gray-300 text-sm font-semibold mb-1">Выносов с первой попытки (+3 балла каждый):</label>
+                        <input type="number" id="first-attempt-vynos-p1" value="0" min="0" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-red-400 mb-2">Игрок 2</h4>
+                        <label for="completed-podlyanki-p2" class="block text-gray-300 text-sm font-semibold mb-1">Выполнено подлянок (+1 балл каждая):</label>
+                        <input type="number" id="completed-podlyanki-p2" value="0" min="0" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        
+                        <label for="successful-vynos-p2" class="block text-gray-300 text-sm font-semibold mb-1">Успешных выносов (100к) (+2 балла каждый):</label>
+                        <input type="number" id="successful-vynos-p2" value="0" min="0" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        
+                        <label for="money-above-target-p2" class="block text-gray-300 text-sm font-semibold mb-1">Суммарно вынесено сверх цели (каждые 30к +1 балл):</label>
+                        <input type="number" id="money-above-target-p2" value="0" min="0" placeholder="Например, 60000 для 2 баллов" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent mb-2">
+                        
+                        <label for="first-attempt-vynos-p2" class="block text-gray-300 text-sm font-semibold mb-1">Выносов с первой попытки (+3 балла каждый):</label>
+                        <input type="number" id="first-attempt-vynos-p2" value="0" min="0" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                </div>
+                <button id="calculate-points-btn"
+                        class="w-full py-3 px-6 rounded-lg bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    Рассчитать победителя
+                </button>
+            </div>
+        </div>
+
+        <!-- Блок для отображения результатов и победителя -->
+        <div id="results-display" class="hidden bg-gray-700 p-6 rounded-xl shadow-inner space-y-4 text-center mt-6">
+            <h3 class="text-2xl font-bold text-gray-200 mb-4">Результаты Челленджа</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xl font-bold">
+                <p class="text-blue-400">Игрок 1: <span id="player1-final-score">0</span></p>
+                <p class="text-red-400">Игрок 2: <span id="player2-final-score">0</span></p>
+            </div>
+            <div id="winner-reveal-area" class="mt-6">
+                <p class="text-3xl font-extrabold text-yellow-400 winner-text hidden">Победитель: <span id="winner-display"></span>!</p>
+                <p class="text-2xl font-semibold text-green-400 congratulations-text hidden">Поздравляем!</p>
+            </div>
+        </div>
+
+        <p class="text-center text-gray-400 mt-4">
+            <a href="admin.html" class="text-green-400 hover:underline">Вернуться в Админ-панель Челленджей</a>
+        </p>
+    </div>
+
+    <script src="score_admin.js"></script>
+</body>
+</html>

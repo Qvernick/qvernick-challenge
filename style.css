@@ -142,3 +142,24 @@ body::before {
     font-size: 0.875rem; /* text-sm */
     color: #9ca3af; /* gray-400 */
 }
+
+/* Анимации для объявления победителя */
+@keyframes winner-glow {
+    0% { opacity: 0; transform: scale(0.8); text-shadow: 0 0 5px rgba(255, 255, 0, 0.5); }
+    50% { opacity: 1; transform: scale(1.1); text-shadow: 0 0 15px rgba(255, 255, 0, 1); }
+    100% { opacity: 1; transform: scale(1); text-shadow: 0 0 5px rgba(255, 255, 0, 0.5); }
+}
+
+.winner-text {
+    animation: winner-glow 1.5s ease-out forwards;
+}
+
+@keyframes confetti-animation {
+    0% { opacity: 0; transform: translateY(50px) scale(0.5); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.congratulations-text {
+    animation: confetti-animation 1s ease-out forwards;
+    animation-delay: 0.5s; /* Задержка после появления победителя */
+}
