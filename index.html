@@ -31,21 +31,21 @@
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100 font-inter p-4">
     <!-- Экран настройки (никнейм, выбор челленджа) -->
-    <div id="setup-screen" class="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto space-y-6 fade-in">
+    <div id="setup-screen" class="glass-panel p-8 w-full max-w-md mx-auto space-y-6 fade-in">
         <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Настройка игры</h1>
         <input type="text" id="nickname" placeholder="Введите ваш никнейм"
-               class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+               class="w-full p-3 glass-input focus:ring-green-500">
         
         <select id="challenge-select"
-                class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                class="w-full p-3 glass-input focus:ring-green-500">
             <option value="">-- Выберите челлендж --</option>
         </select>
 
-        <div id="challenge-description-display" class="bg-gray-700 p-4 rounded-lg text-gray-300 text-sm italic hidden">
+        <div id="challenge-description-display" class="glass-inner-container p-4 text-gray-300 text-sm italic hidden">
             <!-- Описание челленджа будет здесь -->
         </div>
 
-        <div id="setup-challenge-rules-display" class="bg-gray-700 p-4 rounded-lg shadow-inner hidden">
+        <div id="setup-challenge-rules-display" class="glass-inner-container p-4 hidden">
             <h3 class="text-lg font-semibold text-green-400 mb-2">Основные Правила:</h3>
             <ul class="list-disc list-inside text-left text-gray-300 text-sm space-y-1">
                 <!-- Правила челленджа будут здесь -->
@@ -53,7 +53,7 @@
         </div>
         
         <button id="proceed-to-equipment"
-                class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                class="w-full btn-primary">
             Продолжить
         </button>
         <p class="text-center text-gray-400 mt-4">
@@ -62,50 +62,50 @@
     </div>
 
     <!-- ЭКРАН ВВОДА ЭКИПИРОВКИ -->
-    <div id="equipment-screen" class="hidden bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto space-y-6">
+    <div id="equipment-screen" class="hidden glass-panel p-8 w-full max-w-md mx-auto space-y-6">
         <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Ваша Экипировка</h1>
         <p class="text-gray-300 text-center mb-4">Введите списки брони и оружия, которые вы будете использовать в челлендже.</p>
 
         <h3 class="text-xl font-semibold text-gray-200 mt-4">Список брони (каждый предмет с новой строки)</h3>
         <textarea id="armor-list-input" rows="4" placeholder="Куртка новичка&#10;Комбинезон 'Заря'&#10;Экзоскелет"
-                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                  class="w-full p-3 glass-input focus:ring-green-500"></textarea>
 
         <h3 class="text-xl font-semibold text-gray-200 mt-4">Список оружия (каждый предмет с новой строки)</h3>
         <textarea id="weapon-list-input" rows="4" placeholder="АК-74М&#10;ВСС 'Винторез'&#10;FN SCAR-H"
-                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                  class="w-full p-3 glass-input focus:ring-green-500"></textarea>
         
         <button id="start-game-btn"
-                class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                class="w-full btn-primary">
             Начать Челлендж!
         </button>
         <button id="back-to-setup-btn"
-                class="w-full py-3 px-6 rounded-lg bg-gray-600 text-white font-bold hover:bg-gray-700 transition-colors duration-300 shadow-md hover:shadow-lg mt-2">
+                class="w-full btn-secondary mt-2">
             Назад
         </button>
     </div>
 
     <!-- Игровой экран -->
-    <div id="game-screen" class="hidden bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-2xl mx-auto space-y-6">
+    <div id="game-screen" class="hidden glass-panel p-8 w-full max-w-2xl mx-auto space-y-6">
         <div class="flex justify-between items-center mb-4">
             <h2 id="player-name" class="text-2xl font-bold text-green-400">Игрок: </h2>
             <div class="timer text-4xl font-extrabold text-yellow-400">Таймер: <span id="timer-value">10</span>с</div>
         </div>
-        <hr class="border-gray-700">
+        <hr class="border-gray-700 opacity-30">
 
         <!-- Постоянное отображение выбранной экипировки и локации -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div class="bg-gray-700 p-3 rounded-lg border border-gray-600 text-lg font-semibold text-gray-200 text-center">
+            <div class="current-display-box">
                 Броня: <span id="current-armor-display" class="text-blue-400">Не выбрано</span>
             </div>
-            <div class="bg-gray-700 p-3 rounded-lg border border-gray-600 text-lg font-semibold text-gray-200 text-center">
+            <div class="current-display-box">
                 Оружие: <span id="current-weapon-display" class="text-red-400">Не выбрано</span>
             </div>
-            <div class="bg-gray-700 p-3 rounded-lg border border-gray-600 text-lg font-semibold text-gray-200 text-center">
+            <div class="current-display-box">
                 Локация: <span id="current-location-display" class="text-purple-400">Не выбрано</span>
             </div>
         </div>
 
-        <div id="game-challenge-rules-display" class="bg-gray-700 p-4 rounded-lg shadow-inner mb-6">
+        <div id="game-challenge-rules-display" class="glass-inner-container p-4 mb-6">
             <h3 class="text-lg font-semibold text-green-400 mb-2">Основные Правила Челленджа:</h3>
             <ul class="list-disc list-inside text-left text-gray-300 text-sm space-y-1">
                 <!-- Правила челленджа будут здесь -->
@@ -113,26 +113,26 @@
         </div>
 
         <!-- БЛОК ДЛЯ РУЛЕТКИ -->
-        <div id="roulette-section" class="bg-gray-700 p-6 rounded-2xl shadow-lg space-y-4 text-center hidden">
+        <div id="roulette-section" class="glass-inner-container p-6 space-y-4 text-center hidden">
             <h3 class="text-2xl font-bold text-yellow-400">Крутите рулетку!</h3>
             <div class="flex flex-col md:flex-row justify-center gap-4">
-                <div class="roulette-display flex-1 bg-gray-800 p-4 rounded-lg border border-gray-600 text-xl font-bold text-blue-400 min-h-[60px] flex items-center justify-center">
+                <div class="roulette-display flex-1 p-4 text-xl font-bold text-blue-400 min-h-[60px] flex items-center justify-center">
                     <span id="roulette-armor-display">Броня...</span>
                 </div>
-                <div class="roulette-display flex-1 bg-gray-800 p-4 rounded-lg border border-gray-600 text-xl font-bold text-red-400 min-h-[60px] flex items-center justify-center">
+                <div class="roulette-display flex-1 p-4 text-xl font-bold text-red-400 min-h-[60px] flex items-center justify-center">
                     <span id="roulette-weapon-display">Оружие...</span>
                 </div>
-                <div class="roulette-display flex-1 bg-gray-800 p-4 rounded-lg border border-gray-600 text-xl font-bold text-purple-400 min-h-[60px] flex items-center justify-center">
+                <div class="roulette-display flex-1 p-4 text-xl font-bold text-purple-400 min-h-[60px] flex items-center justify-center">
                     <span id="roulette-location-display">Локация...</span>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-center gap-4 mt-4">
                 <button id="spin-roulette-btn"
-                        class="flex-1 py-3 px-6 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                        class="flex-1 btn-purple">
                     Крутить рулетку!
                 </button>
                 <button id="reroll-location-btn"
-                        class="flex-1 py-3 px-6 rounded-lg bg-yellow-600 text-white font-bold hover:bg-yellow-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                        class="flex-1 btn-yellow">
                     Перебросить локацию
                 </button>
             </div>
@@ -152,16 +152,24 @@
 
         <div class="flex justify-center gap-4 mt-8">
             <button id="end-challenge-btn"
-                    class="py-3 px-6 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    class="btn-danger">
                 Закончить Челлендж
             </button>
             <button id="back-to-roulette-btn"
-                    class="py-3 px-6 rounded-lg bg-gray-600 text-white font-bold hover:bg-gray-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    class="btn-secondary">
                 Назад
             </button>
         </div>
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Аудио элементы -->
+    <audio id="button-click-sound" src="https://www.soundjay.com/buttons/button-1.mp3" preload="auto"></audio>
+    <audio id="roulette-spin-sound" src="https://www.soundjay.com/mechanical/mechanical-fan-01.mp3" preload="auto" loop></audio>
+    <audio id="roulette-stop-sound" src="https://www.soundjay.com/misc/winning-sound-2.mp3" preload="auto"></audio>
+    <audio id="card-select-sound" src="https://www.soundjay.com/buttons/button-2.mp3" preload="auto"></audio>
+    <audio id="timer-tick-sound" src="https://www.soundjay.com/misc/clocks-ticking-2.mp3" preload="auto"></audio>
+    <audio id="timer-end-sound" src="https://www.soundjay.com/misc/alarm-clock-bell-01.mp3" preload="auto"></audio>
 </body>
 </html>

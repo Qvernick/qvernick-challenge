@@ -31,47 +31,47 @@
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100 font-inter p-4">
 
-    <div id="login-screen" class="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto space-y-6">
+    <div id="login-screen" class="glass-panel p-8 w-full max-w-md mx-auto space-y-6">
         <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Вход в Админ-панель</h1>
         <input type="password" id="admin-password" placeholder="Введите код доступа"
-               class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+               class="w-full p-3 glass-input focus:ring-green-500">
         <button id="login-btn"
-                class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                class="w-full btn-primary">
             Войти
         </button>
     </div>
 
-    <div id="admin-panel" class="hidden bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-3xl mx-auto space-y-6">
+    <div id="admin-panel" class="hidden glass-panel p-8 w-full max-w-3xl mx-auto space-y-6">
         <h1 class="text-3xl font-extrabold text-green-400 mb-4 text-center">Управление Челленджами</h1>
         
-        <div class="form-container bg-gray-700 p-6 rounded-xl space-y-4">
+        <div class="glass-inner-container p-6 space-y-4">
             <h2 class="text-2xl font-bold text-gray-200">Создать новый челлендж</h2>
             <input type="text" id="challenge-name" placeholder="Название челленджа (например, 'Майнкрафт Хардкор')"
-                   class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                   class="w-full p-3 glass-input focus:ring-green-500">
             
             <h3 class="text-xl font-semibold text-gray-200 mt-4">Описание челленджа</h3>
             <textarea id="challenge-description" rows="4" placeholder="Краткое описание челленджа, например, 'Выживание в хардкорном режиме с особыми правилами.'"
-                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                      class="w-full p-3 glass-input focus:ring-green-500"></textarea>
 
             <h3 class="text-xl font-semibold text-gray-200 mt-4">Основные Правила Челленджа (каждое с новой строки)</h3>
             <textarea id="challenge-rules" rows="6" placeholder="Правило 1&#10;Правило 2&#10;Правило 3"
-                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                      class="w-full p-3 glass-input focus:ring-green-500"></textarea>
 
             <h3 class="text-xl font-semibold text-gray-200 mt-4">Положительные эффекты (каждый с новой строки)</h3>
             <textarea id="positive-effects" rows="8" placeholder="Двойной урон&#10;Регенерация&#10;+100 монет"
-                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                      class="w-full p-3 glass-input focus:ring-green-500"></textarea>
             
             <h3 class="text-xl font-semibold text-gray-200 mt-4">Отрицательные эффекты (каждый с новой строки)</h3>
             <textarea id="negative-effects" rows="8" placeholder="Слепота на 30 сек&#10;Потерять все оружие&#10;-100 монет"
-                      class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                      class="w-full p-3 glass-input focus:ring-green-500"></textarea>
             
             <button id="create-challenge-btn"
-                    class="w-full py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    class="w-full btn-primary">
                 Создать и сохранить
             </button>
         </div>
 
-        <hr class="border-gray-700">
+        <hr class="border-gray-700 opacity-30">
 
         <h2 class="text-2xl font-bold text-gray-200">Сохраненные челленджи</h2>
         <div id="challenges-list" class="space-y-4">

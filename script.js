@@ -61,6 +61,30 @@ const playerEffectsList = document.getElementById('player-effects');
 const endChallengeBtn = document.getElementById('end-challenge-btn'); 
 const backToRouletteBtn = document.getElementById('back-to-roulette-btn'); 
 
+// Аудио элементы
+const buttonClickSound = document.getElementById('button-click-sound');
+const rouletteSpinSound = document.getElementById('roulette-spin-sound');
+const rouletteStopSound = document.getElementById('roulette-stop-sound');
+const cardSelectSound = document.getElementById('card-select-sound');
+const timerTickSound = document.getElementById('timer-tick-sound');
+const timerEndSound = document.getElementById('timer-end-sound');
+
+// --- ФУНКЦИИ УПРАВЛЕНИЯ АУДИО ---
+
+function playSound(audioElement) {
+    if (audioElement) {
+        audioElement.currentTime = 0; // Сбрасываем на начало, чтобы можно было проиграть снова
+        audioElement.play().catch(e => console.error("Ошибка воспроизведения аудио:", e));
+    }
+}
+
+function stopSound(audioElement) {
+    if (audioElement) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+    }
+}
+
 // --- ФУНКЦИИ УПРАВЛЕНИЯ ЭКРАНАМИ С АНИМАЦИЯМИ ---
 
 function showScreen(screenToShow) {
@@ -142,6 +166,7 @@ function startNewRound() {
 
 // Функция для запуска анимации рулетки и выбора предметов
 function spinRoulette() {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     if (playerArmorList.length === 0 || playerWeaponList.length === 0) {
         alert('Списки брони и оружия пусты. Пожалуйста, вернитесь на предыдущий экран и введите их.');
         return;
@@ -151,10 +176,11 @@ function spinRoulette() {
     rerollLocationBtn.classList.add('hidden'); 
     proceedAfterRouletteBtn.classList.add('hidden'); 
 
-    // Добавляем класс анимации
+    // Добавляем класс анимации и запускаем звук вращения
     rouletteArmorDisplay.classList.add('spinning');
     rouletteWeaponDisplay.classList.add('spinning');
     rouletteLocationDisplay.classList.add('spinning');
+    playSound(rouletteSpinSound);
 
     let spinCount = 0;
     const maxSpinCount = 30; 
@@ -175,10 +201,12 @@ function spinRoulette() {
 
 // Функция для окончательного выбора и отображения предметов рулетки
 function finalizeRouletteSelection() {
-    // Удаляем класс анимации
+    // Удаляем класс анимации и останавливаем звук вращения
     rouletteArmorDisplay.classList.remove('spinning');
     rouletteWeaponDisplay.classList.remove('spinning');
     rouletteLocationDisplay.classList.remove('spinning');
+    stopSound(rouletteSpinSound);
+    playSound(rouletteStopSound); // Звук остановки рулетки
 
     selectedRandomArmor = playerArmorList[Math.floor(Math.random() * playerArmorList.length)];
     selectedRandomWeapon = playerWeaponList[Math.floor(Math.random() * playerWeaponList.length)];
@@ -198,14 +226,17 @@ function finalizeRouletteSelection() {
 
 // Функция для переброса локации
 function rerollLocation() {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     selectedRandomLocation = playerLocationList[Math.floor(Math.random() * playerLocationList.length)];
     rouletteLocationDisplay.textContent = `Выбрана локация: ${selectedRandomLocation}`;
     currentLocationDisplay.textContent = selectedRandomLocation;
     alert(`Локация переброшена! Новая локация: ${selectedRandomLocation}`);
+    playSound(rouletteStopSound); // Звук переброса
 }
 
 // Функция для перехода к карточкам после рулетки/переброса
 function proceedToCards() {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     rouletteSection.classList.add('hidden');
     cardsContainer.classList.remove('hidden');
     generateCards(); 
@@ -246,6 +277,7 @@ function generateCards() {
 
 // Обрабатывает выбор карточки игроком
 function selectCard(positive, negative, clickedCardElement) {
+    playSound(cardSelectSound); // Звук выбора карточки
     chosenEffects.push({ positive, negative }); 
     updatePlayerEffects(); 
 
@@ -286,6 +318,7 @@ function updatePlayerEffects() {
     // Добавляем обработчики для новых кнопок удаления
     document.querySelectorAll('.delete-effect-btn').forEach(button => {
         button.addEventListener('click', (event) => {
+            playSound(buttonClickSound); // Звук нажатия кнопки
             const indexToRemove = parseInt(event.target.dataset.index);
             removeEffect(indexToRemove);
         });
@@ -306,15 +339,19 @@ function resetTimer() {
     clearInterval(timer); 
     timerCount = 10; 
     timerValueDisplay.textContent = timerCount; 
+    stopSound(timerTickSound); // Останавливаем тиканье, если оно было
 }
 
 // Запускает таймер обратного отсчета
 function startTimer() {
+    playSound(timerTickSound); // Начинаем тиканье таймера
     timer = setInterval(() => {
         timerCount--;
         timerValueDisplay.textContent = timerCount;
         if (timerCount <= 0) {
             clearInterval(timer); 
+            stopSound(timerTickSound); // Останавливаем тиканье
+            playSound(timerEndSound); // Звук окончания таймера
             startNewRound(); 
         }
     }, 1000); 
@@ -323,6 +360,7 @@ function startTimer() {
 function resetGame() {
     if (confirm('Вы уверены, что хотите закончить текущий челлендж и начать заново?')) {
         clearInterval(timer); 
+        stopSound(timerTickSound); // Останавливаем тиканье
         
         selectedChallengeData = {};
         chosenEffects.length = 0;
@@ -354,6 +392,7 @@ function resetGame() {
 
 // Кнопка "Продолжить" на экране настройки (переход на экран экипировки)
 proceedToEquipmentBtn.addEventListener('click', () => {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     const nickname = nicknameInput.value.trim();
     const selectedIndex = challengeSelect.value;
 
@@ -373,6 +412,7 @@ proceedToEquipmentBtn.addEventListener('click', () => {
 
 // Кнопка "Начать Челлендж!" на экране экипировки (переход на игровой экран)
 startGameBtn.addEventListener('click', () => {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     playerArmorList = armorListInput.value.split('\n').map(function(item) {
         return item.trim();
     }).filter(function(item) {
@@ -410,28 +450,48 @@ startGameBtn.addEventListener('click', () => {
 
 // Кнопка "Назад" на экране экипировки
 backToSetupBtn.addEventListener('click', () => {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     hideCurrentScreenAndShow(setupScreen);
 });
 
 // Кнопка "Закончить Челлендж" на игровом экране
-endChallengeBtn.addEventListener('click', resetGame);
+endChallengeBtn.addEventListener('click', () => {
+    playSound(buttonClickSound); // Звук нажатия кнопки
+    resetGame();
+});
 
 // Кнопка "Назад" на игровом экране (возврат к рулетке)
 backToRouletteBtn.addEventListener('click', () => {
+    playSound(buttonClickSound); // Звук нажатия кнопки
     cardsContainer.classList.add('hidden');
     rouletteSection.classList.remove('hidden');
     spinRouletteBtn.disabled = false; 
     rerollLocationBtn.classList.remove('hidden'); 
     proceedAfterRouletteBtn.classList.remove('hidden'); 
     clearInterval(timer); 
+    stopSound(timerTickSound); // Останавливаем тиканье
 });
 
 
 // Загрузка челленджей при полной загрузке DOM
-document.addEventListener('DOMContentLoaded', loadChallengesIntoSelect);
+document.addEventListener('DOMContentLoaded', async () => {
+    // Ждем, пока window.db будет определен, чтобы избежать ошибок Firebase
+    let attempts = 0;
+    while (!window.db && attempts < 10) { 
+        await new Promise(resolve => setTimeout(resolve, 100)); // Ждем 100мс
+        attempts++;
+    }
+    if (window.db) {
+        await loadChallengesIntoSelect();
+    } else {
+        console.error("Firebase Firestore (window.db) is not available after multiple attempts.");
+        challengeSelect.innerHTML = '<option value="">-- Ошибка загрузки челленджей (Firebase недоступен) --</option>';
+    }
+});
 
 // Обработчик изменения выбора челленджа в выпадающем списке (для экрана настройки)
 challengeSelect.addEventListener('change', () => {
+    playSound(buttonClickSound); // Звук выбора в селекте
     const selectedIndex = challengeSelect.value;
     if (selectedIndex !== "") {
         const challenge = allChallenges[selectedIndex];

@@ -70,12 +70,12 @@ function login() {
 function calculateSumValues() {
     totalMoneyP1 = 0;
     runMoneyInputsP1.forEach(input => {
-        totalMoneyP1 += parseInt(input.value) || 0;
+        totalMoneyP1 += parseInt(input.value) || 0; // Преобразуем в число, если пусто - 0
     });
 
     totalMoneyP2 = 0;
     runMoneyInputsP2.forEach(input => {
-        totalMoneyP2 += parseInt(input.value) || 0;
+        totalMoneyP2 += parseInt(input.value) || 0; // Преобразуем в число, если пусто - 0
     });
 }
 
@@ -87,10 +87,10 @@ function calculatePointsValues() {
     const moneyAboveP1 = parseInt(moneyAboveTargetInputP1.value) || 0;
     const firstAttemptP1 = parseInt(firstAttemptVynosInputP1.value) || 0;
 
-    totalPointsP1 += podlyankiP1 * 1;
-    totalPointsP1 += vynosP1 * 2;
-    totalPointsP1 += Math.floor(moneyAboveP1 / 30000) * 1;
-    totalPointsP1 += firstAttemptP1 * 3;
+    totalPointsP1 += podlyankiP1 * 1; // +1 балл за каждую подлянку
+    totalPointsP1 += vynosP1 * 2; // +2 балла за каждый успешный вынос
+    totalPointsP1 += Math.floor(moneyAboveP1 / 30000) * 1; // +1 балл за каждые 30к сверху
+    totalPointsP1 += firstAttemptP1 * 3; // +3 балла за каждый вынос с первой попытки
 
     totalPointsP2 = 0;
     const podlyankiP2 = parseInt(completedPodlyankiInputP2.value) || 0;
@@ -197,25 +197,6 @@ victoryConditionSelect.addEventListener('change', switchCalculator);
 // Кнопки расчета
 calculateSumBtn.addEventListener('click', displayResults);
 calculatePointsBtn.addEventListener('click', displayResults);
-
-// Обновление значений при изменении любого поля ввода денег (для живого предпросмотра, если захотите)
-runMoneyInputsP1.forEach(input => {
-    input.addEventListener('input', () => { /* calculateSumValues(); */ }); // Убрал вызов, чтобы не обновлялось до нажатия
-});
-runMoneyInputsP2.forEach(input => {
-    input.addEventListener('input', () => { /* calculateSumValues(); */ });
-});
-
-completedPodlyankiInputP1.addEventListener('input', () => { /* calculatePointsValues(); */ });
-successfulVynosInputP1.addEventListener('input', () => { /* calculatePointsValues(); */ });
-moneyAboveTargetInputP1.addEventListener('input', () => { /* calculatePointsValues(); */ });
-firstAttemptVynosInputP1.addEventListener('input', () => { /* calculatePointsValues(); */ });
-
-completedPodlyankiInputP2.addEventListener('input', () => { /* calculatePointsValues(); */ });
-successfulVynosInputP2.addEventListener('input', () => { /* calculatePointsValues(); */ });
-moneyAboveTargetInputP2.addEventListener('input', () => { /* calculatePointsValues(); */ });
-firstAttemptVynosInputP2.addEventListener('input', () => { /* calculatePointsValues(); */ });
-
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
